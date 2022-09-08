@@ -4,6 +4,9 @@ import org.unibl.etf.pj2.diamondcircle.exceptions.IllegalMatrixDimensionExceptio
 import org.unibl.etf.pj2.diamondcircle.exceptions.IllegalNumOfPlayersException;
 import org.unibl.etf.pj2.diamondcircle.exceptions.IllegalNumberOfArgumentsException;
 import org.unibl.etf.pj2.diamondcircle.models.Player;
+import org.unibl.etf.pj2.diamondcircle.models.cards.Card;
+import org.unibl.etf.pj2.diamondcircle.models.cards.SpecialCard;
+import org.unibl.etf.pj2.diamondcircle.models.figures.Figure;
 import org.unibl.etf.pj2.diamondcircle.models.segments.Segment;
 
 import java.io.FileInputStream;
@@ -27,6 +30,7 @@ public class Game {
     private static final int MAX_DIM = 10;
     private static final int MIN_PLAYERS = 2;
     private static final int MAX_PLAYERS = 4;
+    private static final String MOVEMENT_MASSAGE_FORMAT = "Na potezu je %s, %s prelazi %d polja, pomjera se sa pozicije %d na poziciju %d.";
     private static final String LOGGER_PATH = "src/resources/logs/Game.log";
     public static final String RESULTS_PATH = "src/resources/results/";
     private static final String CONFIG_PATH = "src/resources/config.properties";
@@ -49,7 +53,7 @@ public class Game {
     private int matrixDimension;
     private String passedTime;
     private Player currentPlayer;
-   // private  Card currentCard;
+    private Card currentCard;
 
     private volatile boolean pause = false;
     private volatile  boolean gameOver = false;
@@ -57,7 +61,7 @@ public class Game {
     public Segment[][] matrix;
     private final ArrayList<Integer> path = new ArrayList<>();
     private final LinkedList<Player> players = new LinkedList<>();
-    //private final LinkedList<Card> cards = new LinkedList<>();
+    private final LinkedList<Card> cards = new LinkedList<>();
     private Runnable gameOverRunnable;
 
     public Game(){
@@ -124,7 +128,9 @@ public class Game {
         return path.get(index);
     }
 
-
+    public int getNumOfPlayers() {
+        return numOfPlayers;
+    }
 
     public void saveResults(){
         String fileName = RESULTS_PATH + String.format("IGRA_%d.txt", System.currentTimeMillis());
@@ -170,5 +176,19 @@ public class Game {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE,e.fillInStackTrace().toString());
         }
         return properties;
+    }
+
+    public String getMovementMsg(){
+        if(currentCard instanceof SpecialCard) return currentCard.toString();
+        if(currentPlayer == null) return "";
+        String playerName = currentPlayer.getPlayerName();
+        Figure figure = currentPlayer.getCurrentFigure();
+        if(figure == null) return "";
+        String figureName = figure.getFigureName();
+        int numOfFields = figure.getNumOfFields();
+        int startPosition = figure.getStartPosition();
+        int endPosition = figure.getEndPosition();
+        if(startPosition == 0 || endPosition == 0) return "";
+        return String.format(MOVEMENT_MASSAGE_FORMAT, playerName, figureName, numOfFields, startPosition, endPosition);
     }
 }

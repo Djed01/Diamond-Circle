@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Player extends Thread{
-    private static final int NUMBER_OF_FIGURES = 4;
+    public static final int NUMBER_OF_FIGURES = 4;
     private static int counter = 0;
     public final ReentrantLock LOCK = new ReentrantLock();
 
@@ -78,6 +78,8 @@ public class Player extends Thread{
     public ArrayList<String> getFigureNames(){
         return figures.stream().map(Figure::getFigureName).collect(Collectors.toCollection(ArrayList::new));
     }
+
+
     public String getResult(){
         StringBuilder sb = new StringBuilder(name + "\n");
         for(Figure f: figures){

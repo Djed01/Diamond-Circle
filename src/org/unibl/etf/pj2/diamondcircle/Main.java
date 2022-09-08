@@ -1,6 +1,7 @@
 package org.unibl.etf.pj2.diamondcircle;
 
 import org.unibl.etf.pj2.diamondcircle.exceptions.IllegalNumberOfArgumentsException;
+import org.unibl.etf.pj2.diamondcircle.gui.DiamonCircleFrame;
 
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -19,6 +20,7 @@ public class Main {
             } catch (Exception e) {
                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
             }
+            new DiamonCircleFrame();
         }
     }
 
