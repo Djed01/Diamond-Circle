@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class Player extends Thread{
+public class Player extends Thread {
     public static final int NUMBER_OF_FIGURES = 4;
     private static int counter = 0;
     public final ReentrantLock LOCK = new ReentrantLock();
@@ -32,21 +32,21 @@ public class Player extends Thread{
 
     private final ArrayList<Figure> figures = new ArrayList<>(NUMBER_OF_FIGURES);
 
-    public Player(Color color){
-        this("Igrac "+(++counter),color);
+    public Player(Color color) {
+        this("Igrac " + (++counter), color);
     }
 
-    public Player(String name, Color color){
+    public Player(String name, Color color) {
         this.name = name;
         generateFigures(color);
     }
 
-    private void generateFigures(Color color){
+    private void generateFigures(Color color) {
         Random rand = new Random();
-        for(int i=0;i<NUMBER_OF_FIGURES;i++){
-            int type = rand.nextInt();
+        for (int i = 0; i < NUMBER_OF_FIGURES; i++) {
+            int type = rand.nextInt(3);
             Figure figure = null;
-            switch (type){
+            switch (type) {
                 case 0:
                     figure = new BasicFigure(color);
                     break;
@@ -60,49 +60,50 @@ public class Player extends Thread{
             figures.add(figure);
         }
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return "Player{" + "name='" + name + '\'' +
                 ", figures=" + figures +
                 '}';
     }
 
-    public String getPlayerName(){
+    public String getPlayerName() {
         return name;
     }
 
-    public  String getColor(){
+    public String getColor() {
         return figures.get(0).getColor().toString();
     }
 
-    public ArrayList<String> getFigureNames(){
+    public ArrayList<String> getFigureNames() {
         return figures.stream().map(Figure::getFigureName).collect(Collectors.toCollection(ArrayList::new));
     }
 
 
-    public String getResult(){
+    public String getResult() {
         StringBuilder sb = new StringBuilder(name + "\n");
-        for(Figure f: figures){
+        for (Figure f : figures) {
             sb.append(f.getResult());
         }
         return sb.toString();
     }
 
     @Override
-    public void run(){
+    public void run() {
         isStarted = true;
-        synchronized (this.LOCK){
-            while (currentFigureNumber != NUMBER_OF_FIGURES){
+        synchronized (this.LOCK) {
+            while (currentFigureNumber != NUMBER_OF_FIGURES) {
                 try {
                     this.LOCK.wait();
-                }catch (InterruptedException e){
-                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE,e.fillInStackTrace().toString());
+                } catch (InterruptedException e) {
+                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
                 }
 
                 currentFigure = figures.get(currentFigureNumber);
                 currentFigure.setNumOfSteps(numOfFields);
 
-                if(!currentFigure.isStarted()){
+                if (!currentFigure.isStarted()) {
                     currentFigure.start();
                     try {
                         Thread.sleep(500);
@@ -111,15 +112,15 @@ public class Player extends Thread{
                     }
                 }
 
-                synchronized (currentFigure.LOCK){
+                synchronized (currentFigure.LOCK) {
                     currentFigure.LOCK.notify(); //started move
                     try {
                         currentFigure.LOCK.wait(); // waiting to end move
-                        if(currentFigure.isFinished()){
+                        if (currentFigure.isFinished()) {
                             currentFigureNumber++;
                         }
-                    }catch (InterruptedException e){
-                        Logger.getLogger(Game.class.getName()).log(Level.SEVERE,e.fillInStackTrace().toString());
+                    } catch (InterruptedException e) {
+                        Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
                     }
                 }
                 LOCK.notify(); // ended move
@@ -128,19 +129,19 @@ public class Player extends Thread{
         isFinished = true;
     }
 
-    public void setNumOfFields(int numOfFields){
+    public void setNumOfFields(int numOfFields) {
         this.numOfFields = numOfFields;
     }
 
-    public boolean isFinished(){
+    public boolean isFinished() {
         return isFinished;
     }
 
-    public boolean isStarted(){
+    public boolean isStarted() {
         return isStarted;
     }
 
-    public Figure getCurrentFigure(){
+    public Figure getCurrentFigure() {
         return currentFigure;
     }
 }

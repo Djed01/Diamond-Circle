@@ -1,0 +1,25 @@
+Igrac 3
+	Figura9 (LevitatingFigure, YELLOW) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura10 (BasicFigure, YELLOW) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39] - stigla do cilja: Ne
+	Figura11 (LevitatingFigure, YELLOW) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura12 (BasicFigure, YELLOW) - pređeni put [4, 12, 20, 28, 34] - stigla do cilja: Ne
+
+Igrac 1
+	Figura1 (SuperFastFigure, BLUE) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30] - stigla do cilja: Ne
+	Figura2 (SuperFastFigure, BLUE) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura3 (BasicFigure, BLUE) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11] - stigla do cilja: Ne
+	Figura4 (LevitatingFigure, BLUE) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+
+Igrac 2
+	Figura5 (LevitatingFigure, GREEN) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura6 (LevitatingFigure, GREEN) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura7 (LevitatingFigure, GREEN) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura8 (BasicFigure, GREEN) - pređeni put [4, 12, 20] - stigla do cilja: Ne
+
+Igrac 4
+	Figura13 (LevitatingFigure, RED) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura14 (LevitatingFigure, RED) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura15 (SuperFastFigure, RED) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33] - stigla do cilja: Ne
+	Figura16 (SuperFastFigure, RED) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+
+Ukupno vrijeme trajanja igre: null

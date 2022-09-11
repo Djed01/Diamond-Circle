@@ -1,5 +1,6 @@
 package org.unibl.etf.pj2.diamondcircle.models.cards;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
@@ -10,7 +11,7 @@ public abstract class Card {
         this.imagePath = imagePath;
     }
 
- /*   public Image getCardImage(){
-        return new Image(new File(imagePath).toURI().toString(),200,300,false,false);
-    }*/
+    public ImageIcon getCardImage(){
+        return new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(180, 250, Image.SCALE_DEFAULT));
+    }
 }
