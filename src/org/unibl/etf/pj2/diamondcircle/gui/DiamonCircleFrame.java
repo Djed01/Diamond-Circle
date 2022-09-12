@@ -339,7 +339,12 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
             labelUp.setBackground(null);
         });
         Runnable gameOverRunnable = () -> SwingUtilities.invokeLater(() -> {
-            startStopBtn.setEnabled(false);
+            startStopBtn.setText("Restart");
+            startStopBtn.addActionListener(e->{
+                if(e.getSource() == startStopBtn)
+                this.dispose();
+                new DiamonCircleFrame();
+            });
             numOfPlayedGames.setText("<html><div style='text-align: center;'>Trenutni broj odigranih<br>igara: " + getNumbersGamePlayed() + "</div></html>");
         });
         game.setShowCard(cardConsumer);
@@ -362,6 +367,9 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
                 pauseGame();
             }
             startStopBtnClicked++;
+        }
+        if(e.getSource() == showListBtn){
+            new ResultsFrame();
         }
     }
 
