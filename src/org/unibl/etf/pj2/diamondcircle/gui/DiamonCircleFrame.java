@@ -5,6 +5,7 @@ import org.unibl.etf.pj2.diamondcircle.Main;
 import org.unibl.etf.pj2.diamondcircle.models.Player;
 import org.unibl.etf.pj2.diamondcircle.models.cards.Card;
 import org.unibl.etf.pj2.diamondcircle.models.figures.Figure;
+import org.unibl.etf.pj2.diamondcircle.models.figures.FigureMovement;
 import org.unibl.etf.pj2.diamondcircle.models.figures.Levitable;
 import org.unibl.etf.pj2.diamondcircle.models.segments.Diamond;
 import org.unibl.etf.pj2.diamondcircle.models.segments.Hole;
@@ -20,6 +21,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -64,11 +67,15 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
 
     private int startStopBtnClicked = 0;
     private int matrixDimension;
+
+    private static String filePath;
     private static final String IMG_PATH_PREFIX = "src/resources/img/";
 
     public DiamonCircleFrame() {
 
         // Podesavanje Frame-a
+        ImageIcon appIcon = new ImageIcon(IMG_PATH_PREFIX+"logo.png");
+        this.setIconImage(appIcon.getImage());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(new Color(236,239,244));
         setBounds(400, 200, 1200, 850);
@@ -180,6 +187,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
             button.setBackground(Color.white);
             button.setOpaque(true);
             button.setFocusable(false);
+            button.addActionListener(new FigureButtonListener("Figura"+i));
             button.setVerticalAlignment(JButton.CENTER);
             button.setHorizontalAlignment(JButton.CENTER);
             if (i > Main.game.getNumOfPlayers() * Player.NUMBER_OF_FIGURES) {
@@ -265,6 +273,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
         showListBtn.setForeground(Color.BLACK);
         showListBtn.setBackground(Color.white);
         showListBtn.setOpaque(true);
+        showListBtn.addActionListener(this);
         showListBtn.setBounds(10, 10, 170, 70);
         showListBtn.setFocusable(false);
         showListBtn.setVerticalAlignment(JButton.CENTER);
@@ -356,6 +365,17 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
         }
     }
 
+    public void showFigurePath(String figureName){
+        filePath = figureName;
+        File[] files = new File(FigureMovement.MOVEMENTS_PATH).listFiles();
+        assert files != null;
+        if(Arrays.stream(files).anyMatch((file) -> file.getName().endsWith(figureName+".ser"))){
+
+            PathFrame pathFrame = new PathFrame();
+        }
+
+    }
+
     public static String getNumbersGamePlayed() {
         File[] files = new File(Game.RESULTS_PATH).listFiles();
         assert files != null;
@@ -421,6 +441,21 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
                 }
             }
         });
+    }
+
+    private class FigureButtonListener implements ActionListener {
+        private String figureName;
+        FigureButtonListener(String figureName){
+            this.figureName = figureName;
+        }
+        @Override
+        public void actionPerformed(ActionEvent e){
+            showFigurePath(figureName);
+        }
+    }
+
+    public static String getFilePath() {
+        return filePath;
     }
 }
 
