@@ -2,7 +2,6 @@ package org.unibl.etf.pj2.diamondcircle;
 
 import org.unibl.etf.pj2.diamondcircle.exceptions.IllegalMatrixDimensionException;
 import org.unibl.etf.pj2.diamondcircle.exceptions.IllegalNumOfPlayersException;
-import org.unibl.etf.pj2.diamondcircle.exceptions.IllegalNumberOfArgumentsException;
 import org.unibl.etf.pj2.diamondcircle.models.Player;
 import org.unibl.etf.pj2.diamondcircle.models.cards.Card;
 import org.unibl.etf.pj2.diamondcircle.models.cards.NormalCard;
@@ -24,11 +23,8 @@ import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class Game {
-
-
     private static final int MIN_DIM = 7;
     private static final int MAX_DIM = 10;
     private static final int MIN_PLAYERS = 2;
@@ -37,12 +33,12 @@ public class Game {
     private static final String LOGGER_PATH = "src/resources/logs/Game.log";
     public static final String RESULTS_PATH = "src/resources/results/";
     private static final String CONFIG_PATH = "src/resources/config.properties";
-
     private static final int NUMBER_OF_NORMAL_CARDS = 10;
     private static final int NUMBER_OF_SPECIAL_CARDS = 12;
     public final ReentrantLock PAUSE_LOCK = new ReentrantLock();
     public final long SLEEP_TIME = 1000;
 
+    //Podesavanje loggera
     static {
         try {
             Handler fileHandler = new FileHandler(LOGGER_PATH, true);
@@ -90,6 +86,7 @@ public class Game {
     }
 
     private void checkAndAddArguments(int numOfPlayers, int matrixDim) throws IllegalMatrixDimensionException, IllegalNumOfPlayersException {
+        //Provjera odgovarajucih argumenata programa i dodjeljivanje vrijednosti istim
         if (numOfPlayers > MAX_PLAYERS || numOfPlayers < MIN_PLAYERS) {
             throw new IllegalNumOfPlayersException();
         } else {
@@ -117,18 +114,20 @@ public class Game {
     }
 
     private void emptyMovementsFolder() {
+        //Brisanje proslih fajlova sa putanjama figura nakon pokretanja igre
         deleteFiles(new File(FigureMovement.MOVEMENTS_PATH));
     }
 
     public void gameStart() {
+        //Kreiranje i pokretanje niti Duh figure
         GhostFigure ghostFigure = GhostFigure.getGhostFigure();
         ghostFigure.start();
 
         LinkedList<Player> tempPlayers = new LinkedList<>(players);
         int playersFinished = 0;
         while (!gameOver) {
-            currentCard = cards.removeFirst();
-            showCard.accept(currentCard);
+            currentCard = cards.removeFirst(); //Skidanje karte sa pocetka spila
+            showCard.accept(currentCard); //Azuriranje GUI-a
             int numOfFields;
             if (currentCard instanceof NormalCard) {
                 numOfFields = ((NormalCard) currentCard).getNumOfFields();
@@ -136,7 +135,7 @@ public class Game {
                 currentPlayer.setNumOfFields(numOfFields);
 
                 if (!currentPlayer.isStarted()) {
-                    currentPlayer.start();
+                    currentPlayer.start(); //Pokretanje niti igraca
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -145,15 +144,15 @@ public class Game {
                 }
 
                 synchronized (currentPlayer.LOCK) {
-                    currentPlayer.LOCK.notify();
+                    currentPlayer.LOCK.notify(); //Obavjestavanje niti igraca da pocinje sa igrom
                     try {
-                        currentPlayer.LOCK.wait();
+                        currentPlayer.LOCK.wait(); //Cekanje na igraca da zavrsi potez
                         if (!currentPlayer.isFinished()) {
-                            tempPlayers.addLast(currentPlayer);
+                            tempPlayers.addLast(currentPlayer); //Postavljamo ga na kraj "reda"
                         } else {
                             playersFinished++;
                             if (playersFinished == numOfPlayers) {
-                                gameOver = true;
+                                gameOver = true; //Igra je zavrsena kada su svi igraci zavrsili
                             }
                         }
                     } catch (InterruptedException e) {
@@ -161,19 +160,20 @@ public class Game {
                     }
                 }
             } else if (currentCard instanceof SpecialCard) {
-                ((SpecialCard) currentCard).makeHoles();
+                ((SpecialCard) currentCard).makeHoles(); //Pravljenje rupa
             }
-            cards.addLast(currentCard);
+            cards.addLast(currentCard); //Stavljanje karte na kraj spila
         }
         saveResults();
-        gameOverRunnable.run();
+        gameOverRunnable.run(); //Azuriranje GUI-a nakon zavrsetka igre
     }
 
     private void setCards() {
+        //Generisanje spila
         try {
             Properties properties = loadProperties();
             Random rand = new Random();
-            int n = Integer.parseInt(properties.getProperty("n"));
+            int n = Integer.parseInt(properties.getProperty("n")); //Broj rupa
             for (int i = 0; i < NUMBER_OF_NORMAL_CARDS; i++) {
                 cards.add(new NormalCard(1));
                 cards.add(new NormalCard(2));
@@ -183,17 +183,18 @@ public class Game {
             for (int i = 0; i < NUMBER_OF_SPECIAL_CARDS; i++) {
                 cards.add(new SpecialCard(rand.nextInt(n) + 1));
             }
-            Collections.shuffle(cards);
+            Collections.shuffle(cards); //Mjesanje karti
         } catch (NumberFormatException e) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
         }
     }
 
     private void configurePlayers() {
+        //Generisanje igraca
         List<Color> colors = Arrays.asList(Color.values());
-        Collections.shuffle(colors);
-        colors.stream().limit(numOfPlayers).forEach(color -> players.add(new Player(color)));
-        Collections.shuffle(players);
+        Collections.shuffle(colors); //Mjesanje boja u nasumican redoslijed
+        colors.stream().limit(numOfPlayers).forEach(color -> players.add(new Player(color))); //Za svaku boju generisemo igraca
+        Collections.shuffle(players); //Mjesanje igraca u nasumican redoslijed
     }
 
     public BiConsumer<Diamond, Integer> getAddDiamond() {
@@ -259,7 +260,7 @@ public class Game {
     public void setPause(boolean state) {
         synchronized (PAUSE_LOCK) {
             if (!state)
-                PAUSE_LOCK.notifyAll();
+                PAUSE_LOCK.notifyAll(); //Obavjestavanje svih niti
         }
         this.pause = state;
     }
@@ -293,11 +294,6 @@ public class Game {
         return players;
     }
 
-    public ArrayList<String> getFigureNames() {
-        return players.stream().map(Player::getFigureNames).flatMap(ArrayList::stream).sorted(Comparator.comparingInt(String::length)
-                .thenComparing(String::toString)).collect(Collectors.toCollection(ArrayList::new));
-    }
-
     public void setAddHole(BiConsumer<Hole, Integer> addHole) {
         this.addHole = addHole;
     }
@@ -307,6 +303,7 @@ public class Game {
     }
 
     public void saveResults() {
+        //Cuvanje rezultata
         String fileName = RESULTS_PATH + String.format("IGRA_%d.txt", System.currentTimeMillis());
         try (PrintWriter pw = new PrintWriter(fileName)) {
             for (Player p : players) {
@@ -319,6 +316,7 @@ public class Game {
     }
 
     public void setMatrixPath() {
+        //Citanje putanje figura u zavisnosti od dimenzije matrice
         Properties properties = loadProperties();
         String pathStr = null;
         switch (matrixDimension) {
@@ -336,8 +334,8 @@ public class Game {
                 break;
         }
         assert pathStr != null;
-        String[] numStr = pathStr.split(",");
-        Arrays.stream(numStr).forEach(s -> path.add(Integer.parseInt(s)));
+        String[] numStr = pathStr.split(","); //Izdvajanje iz iz stringa
+        Arrays.stream(numStr).forEach(s -> path.add(Integer.parseInt(s))); //Dodjeljivanje vrijednosti nizu putanje
     }
 
     private Properties loadProperties() {

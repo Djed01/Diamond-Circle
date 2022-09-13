@@ -37,21 +37,22 @@ public class ResultsFrame extends JFrame {
 
         // List panel
         listPanel = new JPanel(new BorderLayout());
-        listPanel.setBackground(new Color(220,220,220));
+        listPanel.setBackground(new Color(220, 220, 220));
         listPanel.setOpaque(true);
         listPanel.setBounds(10, 10, 200, 580);
         listPanel.setVisible(true);
 
-
-        File[] files =new File(RESULTS_PATH).listFiles();
-        HashMap<String,File> fileMap = new HashMap<>();
-        for (var file:files) {
-            fileMap.put(file.toString().substring(RESULTS_PATH.length()),file);
+        //Kreiranje mape sa kljucem imenom fajla, a vrijednost je putanja do fajla
+        File[] files = new File(RESULTS_PATH).listFiles();
+        HashMap<String, File> fileMap = new HashMap<>();
+        for (var file : files) {
+            fileMap.put(file.toString().substring(RESULTS_PATH.length()), file);
         }
+        //Kreiranje liste i dodavanje elemenata
         list = new JList(fileMap.keySet().toArray());
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        list.setBackground(new Color(220,220,220));
+        list.setBackground(new Color(220, 220, 220));
         list.setVisibleRowCount(-1);
         list.setVisible(true);
         JScrollPane listScroller = new JScrollPane(list);
@@ -63,7 +64,7 @@ public class ResultsFrame extends JFrame {
 
         //TextPanel
         textPanel = new JPanel(new BorderLayout());
-        textPanel.setBounds(220,10,1000,580);
+        textPanel.setBounds(220, 10, 1000, 580);
         textPanel.setOpaque(true);
         textPanel.setVisible(true);
         textPanel.setBackground(Color.white);
@@ -76,23 +77,23 @@ public class ResultsFrame extends JFrame {
 
         this.getContentPane().add(textPanel);
 
+        //Na dvoklik "otvaramo" fajl i prikazujemo njegov sadrzaj na TextArea
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() % 2 == 0) {
                     StringBuilder resultStringBuilder = new StringBuilder();
-                    try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileMap.get(list.getSelectedValue().toString())))){
+                    try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileMap.get(list.getSelectedValue().toString())))) {
                         String line;
-                        while ((line = bufferedReader.readLine())!=null){
+                        while ((line = bufferedReader.readLine()) != null) {
                             resultStringBuilder.append(line).append("\n");
                         }
-                    } catch (IOException exception){
-                        Logger.getLogger(Game.class.getName()).log(Level.SEVERE,exception.fillInStackTrace().toString());
+                    } catch (IOException exception) {
+                        Logger.getLogger(Game.class.getName()).log(Level.SEVERE, exception.fillInStackTrace().toString());
                     }
                     textArea.setText(resultStringBuilder.toString());
                 }
             }
         });
-
         repaint();
     }
 }

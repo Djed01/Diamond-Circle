@@ -32,7 +32,7 @@ public class SpecialCard extends Card {
     }
 
     public void makeHoles() {
-        ArrayList<Integer> tempPath = new ArrayList<>(); // path for holes
+        ArrayList<Integer> tempPath = new ArrayList<>(); //Putanja za rupe
         ArrayList<Integer> nonLevitatingIndexes = new ArrayList<>();
         int i = 0;
         while (i < numOfHoles) {
@@ -51,19 +51,19 @@ public class SpecialCard extends Card {
             int x = currentIndex / matrixDimension;
             int y = currentIndex % matrixDimension;
             nonLevitatingIndexes.add(currentIndex);
-            game.getAddHole().accept(hole, currentIndex);
+            game.getAddHole().accept(hole, currentIndex); //Dodavanje rupa na GUI-u
             if ((game.matrix[x][y] instanceof Figure) && !(game.matrix[x][y] instanceof Levitable)) {
-                ((Figure) game.matrix[x][y]).fallInsideHole(currentIndex);
+                ((Figure) game.matrix[x][y]).fallInsideHole(currentIndex); //Ako nije lebdeca, figura upada u rupu
                 game.matrix[x][y] = null;
             }
         }
-        // wait and remove holes
+        //Nakon sto se saceka uklanjaju se sve rupe
         try {
             Thread.sleep(game.SLEEP_TIME);
         } catch (InterruptedException e) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
         }
-
+        //Azuriranje GUI-a
         for (Integer index : nonLevitatingIndexes) {
             game.getRemoveHole().accept(index);
         }

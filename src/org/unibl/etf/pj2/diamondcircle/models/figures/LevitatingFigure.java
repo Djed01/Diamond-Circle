@@ -2,31 +2,26 @@ package org.unibl.etf.pj2.diamondcircle.models.figures;
 
 import org.unibl.etf.pj2.diamondcircle.models.segments.Color;
 
-public class LevitatingFigure extends Figure implements Levitable{
+public class LevitatingFigure extends Figure implements Levitable {
 
-    public LevitatingFigure(){
+    public LevitatingFigure() {
         super();
     }
 
-    public LevitatingFigure(Color color){
+    public LevitatingFigure(Color color) {
         super(color);
     }
 
-    public LevitatingFigure(Color color,int numOfSteps){
-        super(color,numOfSteps);
+    public LevitatingFigure(Color color, int numOfSteps) {
+        super(color, numOfSteps);
     }
 
     @Override
-    public String toString(){
-        return "{"+getClass().getSimpleName()+super.toString();
+    public String getLabel() {
+        return getClass().getSimpleName().substring(0, 1);
     }
 
-    @Override
-    public String getLabel(){
-        return getClass().getSimpleName().substring(0,1);
-    }
-
-    public String getType(){
+    public String getType() {
         return getClass().getSimpleName();
     }
 }

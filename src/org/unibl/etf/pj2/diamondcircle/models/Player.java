@@ -61,13 +61,6 @@ public class Player extends Thread {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Player{" + "name='" + name + '\'' +
-                ", figures=" + figures +
-                '}';
-    }
-
     public String getPlayerName() {
         return name;
     }
@@ -80,13 +73,12 @@ public class Player extends Thread {
         return figures.stream().map(Figure::getFigureName).collect(Collectors.toCollection(ArrayList::new));
     }
 
-
     public String getResult() {
-        StringBuilder sb = new StringBuilder(name + "\n");
+        StringBuilder stringBuilder = new StringBuilder(name + "\n");
         for (Figure f : figures) {
-            sb.append(f.getResult());
+            stringBuilder.append(f.getResult());
         }
-        return sb.toString();
+        return stringBuilder.toString();
     }
 
     @Override
@@ -95,7 +87,7 @@ public class Player extends Thread {
         synchronized (this.LOCK) {
             while (currentFigureNumber != NUMBER_OF_FIGURES) {
                 try {
-                    this.LOCK.wait();
+                    this.LOCK.wait(); //Cekanje na potez
                 } catch (InterruptedException e) {
                     Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
                 }
@@ -113,9 +105,9 @@ public class Player extends Thread {
                 }
 
                 synchronized (currentFigure.LOCK) {
-                    currentFigure.LOCK.notify(); //started move
+                    currentFigure.LOCK.notify(); //Pocetak kretanja figure
                     try {
-                        currentFigure.LOCK.wait(); // waiting to end move
+                        currentFigure.LOCK.wait(); //Cekanje na zavrsetak kretanja figure
                         if (currentFigure.isFinished()) {
                             currentFigureNumber++;
                         }
@@ -123,7 +115,7 @@ public class Player extends Thread {
                         Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
                     }
                 }
-                LOCK.notify(); // ended move
+                LOCK.notify(); //Obavjestavanje da je potez igraca zavrsen
             }
         }
         isFinished = true;

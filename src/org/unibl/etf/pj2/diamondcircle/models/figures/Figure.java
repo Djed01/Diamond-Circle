@@ -66,7 +66,7 @@ public abstract class Figure extends Thread implements Segment {
         synchronized (LOCK) {
             while (!game.isLastField(numOfCrossedFields)) {
                 try {
-                    LOCK.wait();
+                    LOCK.wait(); //Cekanje na potez
                 } catch (InterruptedException e) {
                     Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
                 }
@@ -78,6 +78,7 @@ public abstract class Figure extends Thread implements Segment {
                     int matrixDim = game.getMatrixDimension();
                     startPosition = game.getPathSegment(numOfCrossedFields);
 
+                    //Nastavljanje kretanja od pozicije na kojoj je figura stala u prethodnom potezu
                     int currentIndex, indexBeforeMove;
                     if (numOfCrossedFields > 0 && numOfSteps + numOfDiamonds > 0) {
                         indexBeforeMove = game.getPathSegment(numOfCrossedFields - 1) - 1;
@@ -90,44 +91,46 @@ public abstract class Figure extends Thread implements Segment {
                         game.matrix[x][y] = null;
                     }
                     int x, y, temp = numOfCrossedFields;
-                    int numberOfStepsTemp = numOfSteps+1;
+                    int numberOfStepsTemp = numOfSteps + 1;
                     for (int i = 0; numOfCrossedFields < game.getPathSize() && i < numberOfStepsTemp + numOfDiamonds; i++, numOfCrossedFields++) {
+                        //Ukoliko se igra pauzira, pauziramo i kretanje figure
                         synchronized (game.PAUSE_LOCK) {
                             try {
                                 if (game.isPause())
-                                    game.PAUSE_LOCK.wait();
+                                    game.PAUSE_LOCK.wait(); //Cekamo dok se igra ne pokrene
                             } catch (InterruptedException e) {
                                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
                             }
                         }
-                        currentIndex = game.getPathSegment(numOfCrossedFields) -1;
+                        currentIndex = game.getPathSegment(numOfCrossedFields) - 1;
                         x = currentIndex / matrixDim;
                         y = currentIndex % matrixDim;
                         if (temp + numberOfStepsTemp + numOfDiamonds - 1 < game.getPathSize() - 1) {
-                            endPosition = game.getPathSegment(temp + numberOfStepsTemp + numOfDiamonds-1);
+                            endPosition = game.getPathSegment(temp + numberOfStepsTemp + numOfDiamonds - 1);
                         }
 
                         Segment segment = game.matrix[x][y];
                         if (segment instanceof Diamond)
                             pickDiamond(currentIndex, x, y);
 
-                        while (segment instanceof Figure && (i+1 == numberOfStepsTemp + numOfDiamonds))
+                        while (segment instanceof Figure && (i + 1 == numberOfStepsTemp + numOfDiamonds))
                             numberOfStepsTemp++;
 
                         if (!(segment instanceof Figure)) {
-                            game.matrix[x][y] = this;
-                            game.getAddFigure().accept(this, currentIndex);
+                            game.matrix[x][y] = this; //azuriranje matrice
+                            game.getAddFigure().accept(this, currentIndex); //azuriranje GUI-a dodavanjem figure
                         }
 
                         try {
-                            Thread.sleep(game.SLEEP_TIME);
+                            Thread.sleep(game.SLEEP_TIME); //Kretanje svake sekunde
                         } catch (InterruptedException e) {
                             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
                         }
 
+                        //Ujlanjanje figure akko nije kraj kretanja ili  je dosla do cilja
                         if ((i + 1 < numberOfStepsTemp + numOfDiamonds || game.isLastField(numOfCrossedFields + 1)) && !(segment instanceof Figure)) {
-                            game.getRemoveFigure().accept(currentIndex);
-                            game.matrix[x][y] = null;
+                            game.getRemoveFigure().accept(currentIndex); //Uklanjanje figure sa GUI-a
+                            game.matrix[x][y] = null; //Uklanjanje iz matrice
                         }
                         crossedFields.add(currentIndex + 1);
                     }
@@ -136,18 +139,18 @@ public abstract class Figure extends Thread implements Segment {
                 long end = System.currentTimeMillis();
                 time += (end - start);
                 Duration duration = Duration.ofMillis(time);
-                // save to file info about each movement
+                // Cuvanje putanje kretanja
                 new FigureMovement(this.name, this.getLabel(), String.format("%02d:%02d:%02d", (int) duration.toHours(), (int) duration.toMinutes(), (int) duration.toSeconds()), this.color, this.crossedFields);
-                LOCK.notify(); // notify for end of move
+                LOCK.notify(); // Obavjestavanje o kraju kretanja
             }
         }
         isFinished = true;
     }
 
     private void pickDiamond(int index, int x, int y) {
-        game.getRemoveDiamond().accept(index);
+        game.getRemoveDiamond().accept(index); //Uklanjanje dijamanta sa GUI-a
         numOfDiamonds++;
-        game.matrix[x][y] = null;
+        game.matrix[x][y] = null; // Uklanjanje sa matrice
     }
 
     public String getResult() {
@@ -188,7 +191,7 @@ public abstract class Figure extends Thread implements Segment {
     }
 
     public void fallInsideHole(int index) {
-        game.getRemoveFigure().accept(index);
+        game.getRemoveFigure().accept(index); //Uklanjanje figure sa GUI-a
         isFallen = true;
     }
 

@@ -21,11 +21,6 @@ public class SuperFastFigure extends Figure {
     }
 
     @Override
-    public String toString() {
-        return "{" + getClass().getSimpleName() + super.toString();
-    }
-
-    @Override
     public String getLabel() {
         return getClass().getSimpleName().substring(0, 1);
     }

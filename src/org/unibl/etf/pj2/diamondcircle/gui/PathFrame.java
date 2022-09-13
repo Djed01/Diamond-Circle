@@ -1,16 +1,12 @@
 package org.unibl.etf.pj2.diamondcircle.gui;
 
 import org.unibl.etf.pj2.diamondcircle.Main;
-import org.unibl.etf.pj2.diamondcircle.models.figures.Figure;
 import org.unibl.etf.pj2.diamondcircle.models.figures.FigureMovement;
 
-import javax.print.attribute.standard.JobKOctets;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.unibl.etf.pj2.diamondcircle.Main.game;
 
@@ -19,12 +15,13 @@ public class PathFrame extends JFrame {
     private JPanel centralPanel;
     private JPanel topPanel;
     private JLabel matrixLabel[][];
-
-    private JLabel timeLabel;
     private static final String IMG_PATH_PREFIX = "src/resources/img/";
+    private JLabel timeLabel;
+
     public PathFrame() {
+
         // Podesavanje Frame-a
-        ImageIcon appIcon = new ImageIcon(IMG_PATH_PREFIX+"logo.png");
+        ImageIcon appIcon = new ImageIcon(IMG_PATH_PREFIX + "logo.png");
         this.setIconImage(appIcon.getImage());
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.getContentPane().setBackground(new Color(236, 239, 244));
@@ -34,10 +31,10 @@ public class PathFrame extends JFrame {
         this.setLayout(null);
         this.setTitle("FigurePath");
 
-
+        //Gornji panel
         topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
-        topPanel.setBounds(400,10, 200,50);
+        topPanel.setBounds(400, 10, 200, 50);
         this.getContentPane().add(topPanel);
 
         timeLabel = new JLabel();
@@ -70,26 +67,25 @@ public class PathFrame extends JFrame {
 
     }
 
-    private void showFigurePath(FigureMovement figureMovement){
+    private void showFigurePath(FigureMovement figureMovement) {
         Color color;
         try {
             Field field = Class.forName("java.awt.Color").getField(figureMovement.getColor().toString().toLowerCase());
             color = (Color) field.get(null);
         } catch (Exception e) {
-            color = null; // Not defined
+            color = null; // Nije definisana
         }
         String label = figureMovement.getLabel();
         ArrayList<Integer> crossedFields = figureMovement.getCrossedFields();
         String movementTime = figureMovement.getMovementTime();
-        timeLabel.setText("<html><div style='text-align: center;'>Vrijeme kretanja:<br>"+movementTime+"</div></html>");
+        timeLabel.setText("<html><div style='text-align: center;'>Vrijeme kretanja:<br>" + movementTime + "</div></html>");
         int dimension = matrixLabel.length;
-        for(Integer fieldIndex:crossedFields){
+        //Za svako predjeno polje bojimo odgovarajucom bojom i postavljamo text
+        for (Integer fieldIndex : crossedFields) {
             fieldIndex--;
-            matrixLabel[fieldIndex/dimension][fieldIndex%dimension].setBackground(color);
-            matrixLabel[fieldIndex/dimension][fieldIndex%dimension].setText(label);
-            matrixLabel[fieldIndex/dimension][fieldIndex%dimension].setOpaque(true);
+            matrixLabel[fieldIndex / dimension][fieldIndex % dimension].setBackground(color);
+            matrixLabel[fieldIndex / dimension][fieldIndex % dimension].setText(label);
+            matrixLabel[fieldIndex / dimension][fieldIndex % dimension].setOpaque(true);
         }
-
-
     }
 }

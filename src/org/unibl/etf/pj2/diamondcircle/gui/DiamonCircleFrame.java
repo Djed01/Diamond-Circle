@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -29,7 +28,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 import static org.unibl.etf.pj2.diamondcircle.Main.game;
 
@@ -66,7 +64,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
     JPanel centralPanel;
 
     private int startStopBtnClicked = 0;
-    private int matrixDimension;
+    private final int matrixDimension;
 
     private static String filePath;
     private static final String IMG_PATH_PREFIX = "src/resources/img/";
@@ -74,10 +72,10 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
     public DiamonCircleFrame() {
 
         // Podesavanje Frame-a
-        ImageIcon appIcon = new ImageIcon(IMG_PATH_PREFIX+"logo.png");
+        ImageIcon appIcon = new ImageIcon(IMG_PATH_PREFIX + "logo.png");
         this.setIconImage(appIcon.getImage());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.getContentPane().setBackground(new Color(236,239,244));
+        this.getContentPane().setBackground(new Color(236, 239, 244));
         setBounds(400, 200, 1200, 850);
         this.setResizable(false);
         this.setVisible(true);
@@ -87,13 +85,13 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
         // Podesavanje gornjeg Panel-a
 
         topPanel = new JPanel();
-        topPanel.setBackground(new Color(220,220,220));
+        topPanel.setBackground(new Color(220, 220, 220));
         topPanel.setBounds(20, 20, 1140, 140);
         topPanel.setLayout(null);
         topPanel.setVisible(true);
 
         topLeftPanel = new JPanel();
-        topLeftPanel.setBackground(new Color(169,169,169));
+        topLeftPanel.setBackground(new Color(169, 169, 169));
         topLeftPanel.setBounds(10, 10, 366, 80);
         topLeftPanel.setLayout(new BorderLayout());
         topPanel.add(topLeftPanel);
@@ -105,12 +103,12 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
         }
         numOfPlayedGames.setHorizontalAlignment(JLabel.CENTER);
-        numOfPlayedGames.setForeground(new Color(46,52,64));
+        numOfPlayedGames.setForeground(new Color(46, 52, 64));
         topLeftPanel.add(numOfPlayedGames);
         numOfPlayedGames.setVisible(true);
 
         topCenterPanel = new JPanel();
-        topCenterPanel.setBackground(new Color(169,169,169));
+        topCenterPanel.setBackground(new Color(169, 169, 169));
         topCenterPanel.setBounds(366 + 2 * 10, 10, 366, 80);
         topCenterPanel.setLayout(new BorderLayout());
         topPanel.add(topCenterPanel);
@@ -124,7 +122,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
         title.setVisible(true);
 
         topRightPanel = new JPanel();
-        topRightPanel.setBackground(new Color(169,169,169));
+        topRightPanel.setBackground(new Color(169, 169, 169));
         topRightPanel.setBounds(2 * 366 + 3 * 10, 10, 366, 80);
         topRightPanel.setLayout(null);
         topPanel.add(topRightPanel);
@@ -143,7 +141,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
         startStopBtn.setVisible(true);
 
         topBottomPanel = new JPanel();
-        topBottomPanel.setBackground(new Color(169,169,169));
+        topBottomPanel.setBackground(new Color(169, 169, 169));
         topBottomPanel.setBounds(10, 100, 1118, 30);
         topBottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 80, 7));
         topPanel.add(topBottomPanel);
@@ -156,7 +154,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
             playerLabel[num].setText(player.getPlayerName());
             Color color;
             try {
-                Field field = Class.forName("java.awt.Color").getField(player.getColor().toString().toLowerCase());
+                Field field = Class.forName("java.awt.Color").getField(player.getColor().toLowerCase());
                 color = (Color) field.get(null);
             } catch (Exception e) {
                 color = null; // Not defined
@@ -172,7 +170,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
         // Podesavanje lijevog panela
 
         leftPanel = new JPanel();
-        leftPanel.setBackground(new Color(220,220,220));
+        leftPanel.setBackground(new Color(220, 220, 220));
         leftPanel.setBounds(20, 170, 200, 620);
         leftPanel.setLayout(new FlowLayout());
         leftPanel.setVisible(true);
@@ -187,7 +185,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
             button.setBackground(Color.white);
             button.setOpaque(true);
             button.setFocusable(false);
-            button.addActionListener(new FigureButtonListener("Figura"+i));
+            button.addActionListener(new FigureButtonListener("Figura" + i));
             button.setVerticalAlignment(JButton.CENTER);
             button.setHorizontalAlignment(JButton.CENTER);
             if (i > Main.game.getNumOfPlayers() * Player.NUMBER_OF_FIGURES) {
@@ -201,7 +199,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
 
         // Podesavanje desnog panela
         rightPanel = new JPanel();
-        rightPanel.setBackground(new Color(220,220,220));
+        rightPanel.setBackground(new Color(220, 220, 220));
         rightPanel.setBounds(960, 170, 200, 500);
         rightPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 50));
         rightPanel.setVisible(true);
@@ -244,13 +242,13 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
 
         // Podesavanje donjeg panela
         bottomPanel = new JPanel();
-        bottomPanel.setBackground(new Color(220,220,220));
+        bottomPanel.setBackground(new Color(220, 220, 220));
         bottomPanel.setBounds(230, 680, 930, 110);
         bottomPanel.setLayout(null);
         bottomPanel.setVisible(true);
 
         bottomLeftPanel = new JPanel();
-        bottomLeftPanel.setBackground(new Color(169,169,169));
+        bottomLeftPanel.setBackground(new Color(169, 169, 169));
         bottomLeftPanel.setBounds(10, 10, 710, 90);
         bottomLeftPanel.setLayout(new BorderLayout());
         bottomPanel.add(bottomLeftPanel);
@@ -263,7 +261,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
         bottomLeftPanel.add(description);
 
         bottomRightPanel = new JPanel();
-        bottomRightPanel.setBackground(new Color(169,169,169));
+        bottomRightPanel.setBackground(new Color(169, 169, 169));
         bottomRightPanel.setBounds(730, 10, 190, 90);
         bottomRightPanel.setLayout(null);
         bottomPanel.add(bottomRightPanel);
@@ -285,15 +283,19 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
 
         repaint();
 
+        //Postavljanje odgovarajuce slike karte
         Consumer<Card> cardConsumer = (Card card) -> SwingUtilities.invokeLater(() -> picLabel.setIcon(card.getCardImage()));
 
+        //Prikazivanje dijamanta na GUI-u
         BiConsumer<Diamond, Integer> addDiamondConsumer = (diamond, index) -> SwingUtilities.invokeLater(() -> {
             ImageIcon diamondIcon = new ImageIcon(diamond.getDiamondImage().getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT));
             matrixLabel[index / matrixDimension][index % matrixDimension].setIcon(diamondIcon);
         });
 
+        //Uklanjanje dijamanta sa GUI-a
         Consumer<Integer> removeDiamondConsumer = (index) -> SwingUtilities.invokeLater(() -> matrixLabel[index / matrixDimension][index % matrixDimension].setIcon(null));
 
+        //Prikazivanje rupe na GUI-u
         BiConsumer<Hole, Integer> addHole = (hole, index) -> SwingUtilities.invokeLater(() -> {
             JLabel label = matrixLabel[index / matrixDimension][index % matrixDimension];
             label.setForeground(Color.white);
@@ -301,11 +303,13 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
             label.setBackground(Color.BLACK);
         });
 
+        //Uklanjanje rupe sa GUI-a
         Consumer<Integer> removeHole = (index) -> SwingUtilities.invokeLater(() -> {
             JLabel label = matrixLabel[index / matrixDimension][index % matrixDimension];
             label.setOpaque(true);
             label.setForeground(Color.black);
-            if(game.matrix[index / matrixDimension][index % matrixDimension] instanceof Figure && game.matrix[index / matrixDimension][index % matrixDimension] instanceof Levitable){
+            //Ukoliko je na poziciji bila lebdeca figura prikazujemo je ponovo nakon uklanjanja rupe
+            if (game.matrix[index / matrixDimension][index % matrixDimension] instanceof Figure && game.matrix[index / matrixDimension][index % matrixDimension] instanceof Levitable) {
                 Color color;
                 try {
                     Field field = Class.forName("java.awt.Color").getField(((Figure) game.matrix[index / matrixDimension][index % matrixDimension]).getColor().toString().toLowerCase());
@@ -313,14 +317,16 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
                 } catch (Exception e) {
                     color = null; // Not defined
                 }
-               label.setBackground (color);
-            }else {
+                label.setBackground(color);
+            } else {
+                //Inace ulanjamo samo rupu i ne bojimo polje
                 label.setBackground(null);
             }
         });
 
+        //Prikaz figure na GUI-u
         BiConsumer<Figure, Integer> addFigureConsumer = (figure, index) -> SwingUtilities.invokeLater(() -> {
-            JLabel labelUp = (JLabel) matrixLabel[index / matrixDimension][index % matrixDimension];
+            JLabel labelUp = matrixLabel[index / matrixDimension][index % matrixDimension];
             labelUp.setText(figure.getLabel());
             Color color;
             try {
@@ -332,21 +338,27 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
             labelUp.setOpaque(true);
             labelUp.setBackground(color);
         });
+
+        //Uklanjanje figure sa GUI-a
         Consumer<Integer> removeFigureConsumer = (index) -> SwingUtilities.invokeLater(() -> {
             JLabel labelUp = matrixLabel[index / matrixDimension][index % matrixDimension];
             labelUp.setText(Integer.toString(index + 1));
             labelUp.setOpaque(true);
             labelUp.setBackground(null);
         });
+
+        //Podesavanje GUI-a nakon zavrsetka igre
         Runnable gameOverRunnable = () -> SwingUtilities.invokeLater(() -> {
             startStopBtn.setText("Restart");
-            startStopBtn.addActionListener(e->{
-                if(e.getSource() == startStopBtn)
-                this.dispose();
-                new DiamonCircleFrame();
+            startStopBtn.addActionListener(e -> {
+                if (e.getSource() == startStopBtn) {
+                    this.dispose();
+                    new DiamonCircleFrame();
+                }
             });
             numOfPlayedGames.setText("<html><div style='text-align: center;'>Trenutni broj odigranih<br>igara: " + getNumbersGamePlayed() + "</div></html>");
         });
+
         game.setShowCard(cardConsumer);
         game.setAddDiamond(addDiamondConsumer);
         game.setRemoveDiamond(removeDiamondConsumer);
@@ -368,23 +380,24 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
             }
             startStopBtnClicked++;
         }
-        if(e.getSource() == showListBtn){
+        if (e.getSource() == showListBtn) {
             new ResultsFrame();
         }
     }
 
-    public void showFigurePath(String figureName){
+    public void showFigurePath(String figureName) {
+        //Pokretanje Frame-a za prikaz putanje figure
         filePath = figureName;
         File[] files = new File(FigureMovement.MOVEMENTS_PATH).listFiles();
         assert files != null;
-        if(Arrays.stream(files).anyMatch((file) -> file.getName().endsWith(figureName+".ser"))){
-
+        if (Arrays.stream(files).anyMatch((file) -> file.getName().endsWith(figureName + ".ser"))) {
             PathFrame pathFrame = new PathFrame();
         }
 
     }
 
     public static String getNumbersGamePlayed() {
+        //Iscitavanje broja fajlova sa rezultatima
         File[] files = new File(Game.RESULTS_PATH).listFiles();
         assert files != null;
         return String.valueOf(files.length);
@@ -392,6 +405,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
 
     private void startGame() {
         if (startStopBtnClicked == 0) {
+            //Pokretanje niti
             Thread gameDuration = timer();
             gameDuration.start();
             new Thread(() -> game.gameStart()).start();
@@ -408,6 +422,7 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
     }
 
     private Thread timer() {
+        //Mjerenje vremena na nacin da nit postavimo u sleep mode jednu sekundu te nakon toga povecavamo brojace
         return new Thread(() -> {
             int hours = 0, minutes = 0, seconds = 0;
             while (!game.isGameOver()) {
@@ -437,10 +452,11 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
     }
 
     private Thread movementMessage() {
+        //Azuriranje opisa karte svake sekunde
         return new Thread(() -> {
             while (!game.isGameOver()) {
                 if (!game.isPause()) {
-                    SwingUtilities.invokeLater(()->description.setText(game.getMovementMsg()));
+                    SwingUtilities.invokeLater(() -> description.setText(game.getMovementMsg()));
                     try {
                         Thread.sleep(game.SLEEP_TIME);
                     } catch (InterruptedException e) {
@@ -451,13 +467,16 @@ public class DiamonCircleFrame extends JFrame implements ActionListener {
         });
     }
 
+    //Unutrasnja klasa za implementaciju ActionListener-a za prikaz putanja figura
     private class FigureButtonListener implements ActionListener {
-        private String figureName;
-        FigureButtonListener(String figureName){
+        private final String figureName;
+
+        FigureButtonListener(String figureName) {
             this.figureName = figureName;
         }
+
         @Override
-        public void actionPerformed(ActionEvent e){
+        public void actionPerformed(ActionEvent e) {
             showFigurePath(figureName);
         }
     }

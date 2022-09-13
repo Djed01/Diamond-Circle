@@ -1,0 +1,13 @@
+Igrac 1
+	Figura1 (BasicFigure, GREEN) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura2 (SuperFastFigure, GREEN) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura3 (SuperFastFigure, GREEN) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura4 (LevitatingFigure, GREEN) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+
+Igrac 2
+	Figura5 (LevitatingFigure, YELLOW) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura6 (LevitatingFigure, YELLOW) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+	Figura7 (BasicFigure, YELLOW) - pređeni put [4, 12, 20] - stigla do cilja: Ne
+	Figura8 (BasicFigure, YELLOW) - pređeni put [4, 12, 20, 28, 34, 40, 46, 38, 30, 22, 16, 10, 11, 19, 27, 33, 39, 31, 23, 17, 18, 26, 32, 24, 25] - stigla do cilja: Da
+
+Ukupno vrijeme trajanja igre: 0 h 3 m 14 s

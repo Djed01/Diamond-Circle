@@ -16,7 +16,7 @@ public class FigureMovement implements Serializable {
     private final Color color;
     private final ArrayList<Integer> crossedFields;
 
-    public FigureMovement(String name, String label, String movementTime, Color color, ArrayList<Integer> crossedFields){
+    public FigureMovement(String name, String label, String movementTime, Color color, ArrayList<Integer> crossedFields) {
         this.name = name;
         this.label = label;
         this.movementTime = movementTime;
@@ -25,20 +25,22 @@ public class FigureMovement implements Serializable {
         serialize();
     }
 
-    private void serialize(){
-        try (FileOutputStream fileOutputStream = new FileOutputStream(MOVEMENTS_PATH+name+".ser");
-             ObjectOutputStream out = new ObjectOutputStream(fileOutputStream)){
+    private void serialize() {
+        //Serializacija
+        try (FileOutputStream fileOutputStream = new FileOutputStream(MOVEMENTS_PATH + name + ".ser");
+             ObjectOutputStream out = new ObjectOutputStream(fileOutputStream)) {
             out.writeObject(this);
-        }catch (IOException e){
-            Logger.getLogger(Game.class.getName()).log(Level.SEVERE,e.fillInStackTrace().toString());
+        } catch (IOException e) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
         }
     }
 
-    public static FigureMovement deserialize(String fileName){
+    public static FigureMovement deserialize(String fileName) {
+        //Deseralizacija
         FigureMovement figureMovement = null;
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(MOVEMENTS_PATH+fileName+".ser"))){
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(MOVEMENTS_PATH + fileName + ".ser"))) {
             figureMovement = (FigureMovement) in.readObject();
-        }catch (IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, e.fillInStackTrace().toString());
         }
         return figureMovement;
